@@ -3,7 +3,7 @@ pathDown = [], pathCenter = [], pathUp = [], drawUp = false, drawCenter = false,
 
 function setup_() {
     R = min(width, height)/8
-    r = R/3
+    r = R
     angle = 0
     circleA = createVector(0, 0)
     circleB = createVector(0, R+r)
