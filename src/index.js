@@ -1,4 +1,4 @@
-var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 2000, animate = false, turns = 1, showCircles = true
+var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 1000, animate = false, turns = 1, showCircles = true
 pathDown = [], pathCenter = [], pathUp = [],  pathRight = [],  pathLeft = [],
 drawUp = false, drawCenter = false, drawDown = true, drawRight = false, drawLeft = false
 
@@ -43,7 +43,7 @@ function draw_() {
 function update() {
     computePaths()
     if(animate) {
-        step += 4
+        step += 2
         if(step >= maxStep) {
             step = maxStep
             animate = false
