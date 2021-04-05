@@ -6,8 +6,8 @@ function createGUI() {
     add(window, 'step', 0, maxStep, 1).name('Step').listen()
 
     setFolder('Params')
-    add(window, 'r', 1, 200, 1).name('r').listen()
-    add(window, 'R', 1, 200, 1).name('R').listen()
+    add(window, 'r', 1, 200, 1).name('Radius Blue (r)').listen()
+    add(window, 'R', 1, 200, 1).name('Radius Red (R)').listen()
     add(window, 'drawDown').name('Path Down').listen()
     add(window, 'drawCenter').name('Path Center').listen()
     add(window, 'drawUp').name('Path Up').listen()
@@ -15,6 +15,7 @@ function createGUI() {
     add(window, 'drawRight').name('Path Right').listen()
     add(window, 'turns', 1, 30, 1).name('Turns').listen()
     add(window, 'showCircles').name('Show Circles').listen()
+    add(window, 'ratio', 1, 10, 1).name('Ratio').onChange(() => r = R / ratio)
 
     setFolder('Stats')
     add(window, 'showStats').name('Show Stats').onChange(() => stats.domElement.style.display = showStats ? 'block' : 'none')

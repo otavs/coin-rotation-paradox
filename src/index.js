@@ -1,4 +1,4 @@
-var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 1000, animate = false, turns = 1, showCircles = true
+var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 1000, animate = false, turns = 1, showCircles = true, ratio = 1
 pathDown = [], pathCenter = [], pathUp = [],  pathRight = [],  pathLeft = [],
 drawUp = false, drawCenter = false, drawDown = true, drawRight = false, drawLeft = false
 
@@ -70,10 +70,8 @@ function drawPaths() {
 }
 
 function drawCircleA() {
-    fill('#c7eaff')
+    fill('#ffc7c7')
     circle(circleA.x, circleA.y, R*2)
-    fill('#0000FF')
-    circle(circleA.x, circleA.y, 10)
 }
 
 function drawCircleB() {
@@ -82,8 +80,6 @@ function drawCircleB() {
 }
 
 function drawDetails() {
-    fill('#0000FF')
-    circle(circleB.x, circleB.y, 10)
     const BA = Vector.sub(circleA, circleB).setMag(r)
     if(drawDown)
         drawLinePointVector(circleB, Vector.rotate(BA, -angleB))
@@ -95,6 +91,10 @@ function drawDetails() {
         drawLinePointVector(circleB, Vector.rotate(BA, -angleB - HALF_PI))
     if(drawCenter)
         drawLinePointVector(circleB, Vector.rotate(BA, -angleB))
+    fill('#0000FF')
+    circle(circleB.x, circleB.y, r/14)
+    fill('#FF0000')
+    circle(circleA.x, circleA.y, R/14)
 }
 
 function drawLinePointVector(p, v) {
