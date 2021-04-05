@@ -2,13 +2,19 @@ function createGUI() {
     const gui = new dat.GUI()
     let folder = gui
 
-    add(window, 'r', 1, 500, 1).name('r').listen()
-    add(window, 'R', 1, 500, 1).name('R').listen()
+    add(window, 'animate').name('Animate').listen().onChange(() => {if(step == maxStep) step = 0})
     add(window, 'step', 0, maxStep, 1).name('Step').listen()
-    add(window, 'animate').name('Animate').listen()
-    add(window, 'drawUp').name('Up').listen()
-    add(window, 'drawCenter').name('Center').listen()
-    add(window, 'drawDown').name('Down').listen()
+
+    setFolder('Params')
+    add(window, 'r', 1, 200, 1).name('r').listen()
+    add(window, 'R', 1, 200, 1).name('R').listen()
+    add(window, 'drawDown').name('Path Down').listen()
+    add(window, 'drawCenter').name('Path Center').listen()
+    add(window, 'drawUp').name('Path Up').listen()
+    add(window, 'drawLeft').name('Path Left').listen()
+    add(window, 'drawRight').name('Path Right').listen()
+    add(window, 'turns', 1, 30, 1).name('Turns').listen()
+    add(window, 'showCircles').name('Show Circles').listen()
 
     setFolder('Stats')
     add(window, 'showStats').name('Show Stats').onChange(() => stats.domElement.style.display = showStats ? 'block' : 'none')

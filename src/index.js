@@ -1,8 +1,9 @@
-var R = 0, r = 0, circleA, circleB, angle = 0, step = 0, maxStep = 300, animate = false,
-pathDown = [], pathCenter = [], pathUp = [], drawUp = false, drawCenter = false, drawDown = true
+var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 2000, animate = false, turns = 1, showCircles = true
+pathDown = [], pathCenter = [], pathUp = [],  pathRight = [],  pathLeft = [],
+drawUp = false, drawCenter = false, drawDown = true, drawRight = false, drawLeft = false
 
 function setup_() {
-    R = min(width, height)/8
+    R = min(width, height) / 8
     r = R
     angle = 0
     circleA = createVector(0, 0)
@@ -11,51 +12,60 @@ function setup_() {
 }
 
 function computePaths() {
-    pathDown = [], pathCenter = [], pathUp = []
-    for(let i = 0; i < maxStep; i++) {
-        let circleA_ = circleA.copy()
-        let angle_ = map(i, 0, maxStep, 0, 2*PI)
-        let circleB_ = createVector(0, R+r).setHeading(PI/2 - angle_)
-        const rotatedPoint = circleB_.copy().add(circleA_.copy().sub(circleB_).setMag(r).rotate(-angle_ * R/r))
-        const rotatedPointUp = circleB_.copy().add(circleA_.copy().sub(circleB_).setMag(-r).rotate(-angle_ * R/r))
-        pathDown.push(rotatedPoint)
+    pathDown = [], pathCenter = [], pathUp = [], pathRight = [], pathLeft = []
+    for(let i = 0; i <= maxStep; i++) {
+        const angle_ = map(i, 0, maxStep, 0, turns * TWO_PI)
+        const angleB_ = angle_ * R/r
+        const circleB_ = createVector(0, R+r).setHeading(HALF_PI - angle_)
+        const BA = Vector.sub(circleA, circleB_).setMag(r)
+        pathDown.push(Vector.add(circleB_, Vector.rotate(BA, -angleB_)))
+        pathUp.push(Vector.add(circleB_, Vector.rotate(BA, -angleB_ + PI)))
+        pathRight.push(Vector.add(circleB_, Vector.rotate(BA, -angleB_ + HALF_PI)))
+        pathLeft.push(Vector.add(circleB_, Vector.rotate(BA, -angleB_ - HALF_PI)))
         pathCenter.push(circleB_)
-        pathUp.push(rotatedPointUp)
     }
 }
 
 function draw_() {
     update()
     background('#fffdc7')
-    translate(width * 0.5, height * 0.5)
+    translate(width/2, height/2)
     scale(1, -1)
-    // rotate(-PI/2)
     fill('#c7eaff')
-    drawCircleA()
-    drawCircleB()
-    drawPoint()
-    drawPath()
+    if(showCircles) {
+        drawCircleA()
+        drawCircleB()
+        drawDetails()
+    }
+    drawPaths()
 }
 
 function update() {
     computePaths()
     if(animate) {
-        step++
-        if(step > maxStep)
+        step += 4
+        if(step >= maxStep) {
             step = maxStep
+            animate = false
+        }
     }
-    angle = map(step, 0, maxStep, 0, 2*PI)
+    angle = map(step, 0, maxStep, 0, turns * TWO_PI)
+    angleB = angle * R/r
     circleB = createVector(0, R+r).setHeading(PI/2 - angle)
 }
 
-function drawPath() {
-    for(let i = 1; i < step; i++) {
+function drawPaths() {
+    for(let i = 1; i <= step; i++) {
         if(drawUp)
             line(pathUp[i-1].x, pathUp[i-1].y, pathUp[i].x, pathUp[i].y)
         if(drawCenter)
             line(pathCenter[i-1].x, pathCenter[i-1].y, pathCenter[i].x, pathCenter[i].y)
         if(drawDown)
             line(pathDown[i-1].x, pathDown[i-1].y, pathDown[i].x, pathDown[i].y)
+        if(drawLeft)
+            line(pathLeft[i-1].x, pathLeft[i-1].y, pathLeft[i].x, pathLeft[i].y)
+        if(drawRight)
+            line(pathRight[i-1].x, pathRight[i-1].y, pathRight[i].x, pathRight[i].y)
     }
 }
 
@@ -71,26 +81,22 @@ function drawCircleB() {
     circle(circleB.x, circleB.y, r*2)
 }
 
-function drawPoint() {
-    const point = circleB.copy().add(circleA.copy().sub(circleB).setMag(r))
-    fill('#00FF00')
-    // circle(rotatedPoint.x, rotatedPoint.y, 10)
+function drawDetails() {
     fill('#0000FF')
-    if(drawUp)
-        drawLine(circleB, circleB.copy().add(circleA.copy().sub(circleB).setMag(-r).rotate(-angle * R/r)))
-    if(drawCenter)
-        drawLine(circleB, circleB.copy().add(circleA.copy().sub(circleB).setMag(r).rotate(-angle * R/r)))
-    if(drawDown)
-        drawLine(circleB, circleB.copy().add(circleA.copy().sub(circleB).setMag(r).rotate(-angle * R/r)))
     circle(circleB.x, circleB.y, 10)
+    const BA = Vector.sub(circleA, circleB).setMag(r)
+    if(drawDown)
+        drawLinePointVector(circleB, Vector.rotate(BA, -angleB))
+    if(drawUp)
+        drawLinePointVector(circleB, Vector.rotate(BA, -angleB + PI))
+    if(drawRight)
+        drawLinePointVector(circleB, Vector.rotate(BA, -angleB + HALF_PI))
+    if(drawLeft)
+        drawLinePointVector(circleB, Vector.rotate(BA, -angleB - HALF_PI))
+    if(drawCenter)
+        drawLinePointVector(circleB, Vector.rotate(BA, -angleB))
 }
 
-function drawLine(a, b) {
-    line(a.x, a.y, b.x, b.y)
-}
-
-function drawFixedLine() {
-    const dir = p5.Vector.sub(circleB, circleA).setMag(R)
-    fill('#00FF00')
-    circle(dir.x, dir.y, 10)
+function drawLinePointVector(p, v) {
+    line(p.x, p.y, p.x + v.x, p.y + v.y)
 }
