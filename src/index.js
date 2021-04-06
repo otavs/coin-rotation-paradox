@@ -44,7 +44,7 @@ function draw_() {
 function update() {
     computePaths()
     if(animate) {
-        step += 2
+        step += 2 * animationSpeed
         if(step >= maxStep) {
             step = maxStep
             animate = false

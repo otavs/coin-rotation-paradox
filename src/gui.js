@@ -16,7 +16,7 @@ function createGUI() {
     add(window, 'drawRight').name('Path Right').listen()
     add(window, 'turns', 1, 30, 1).name('Turns').listen()
     add(window, 'showCircles').name('Show Circles').listen()
-    // add(window, 'animationSpeed', 1, 10, 1).name('Animation Speed').listen()
+    add(window, 'animationSpeed', 1, 10, 1).name('Animation Speed').listen()
 
     setFolder('Color')
     addColor(window, 'colorBg').name('Background')
