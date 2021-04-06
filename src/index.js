@@ -1,4 +1,4 @@
-var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 1000, animate = false, turns = 1, showCircles = true, ratio = 1, animationSpeed = 1
+var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 1000, animate = false, turns = 1, showCircles = true, ratio = 1, animationSpeed = 1, isAnimationLoop = false
 pathDown = [], pathCenter = [], pathUp = [],  pathRight = [],  pathLeft = [],
 drawUp = false, drawCenter = false, drawDown = true, drawRight = false, drawLeft = false,
 colorBg = '#fffdc7', colorCircleA = '#ffc7c7', colorCircleB = '#c7eaff', colorCenterA = '#FF0000', colorCenterB = '#0000FF', 
@@ -46,8 +46,11 @@ function update() {
     if(animate) {
         step += 2 * animationSpeed
         if(step >= maxStep) {
-            step = maxStep
-            animate = false
+            if(!isAnimationLoop) {
+                step = maxStep
+                animate = false
+            }
+            else step = 0
         }
     }
     angle = map(step, 0, maxStep, 0, turns * TWO_PI)
