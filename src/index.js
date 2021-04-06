@@ -7,9 +7,7 @@ colorPathDown = '#000000', colorPathCenter = '#000000', colorPathUp = '#000000',
 function setup_() {
     R = min(width, height) / 8
     r = R
-    angle = 0
     circleA = createVector(0, 0)
-    circleB = createVector(0, R+r)
     computePaths()
 }
 
@@ -55,7 +53,7 @@ function update() {
     }
     angle = map(step, 0, maxStep, 0, turns * TWO_PI)
     angleB = angle * R/r
-    circleB = createVector(0, R+r).setHeading(PI/2 - angle)
+    circleB = createVector(0, R+r).setHeading(HALF_PI - angle)
 }
 
 function drawPaths() {
