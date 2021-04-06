@@ -1,6 +1,8 @@
-var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 1000, animate = false, turns = 1, showCircles = true, ratio = 1
+var R = 0, r = 0, circleA, circleB, angle = 0, angleB = 0, step = 0, maxStep = 1000, animate = false, turns = 1, showCircles = true, ratio = 1, animationSpeed = 1
 pathDown = [], pathCenter = [], pathUp = [],  pathRight = [],  pathLeft = [],
-drawUp = false, drawCenter = false, drawDown = true, drawRight = false, drawLeft = false
+drawUp = false, drawCenter = false, drawDown = true, drawRight = false, drawLeft = false,
+colorBg = '#fffdc7', colorCircleA = '#ffc7c7', colorCircleB = '#c7eaff', colorCenterA = '#FF0000', colorCenterB = '#0000FF', 
+colorPathDown = '#000000', colorPathCenter = '#000000', colorPathUp = '#000000', colorPathLeft = '#000000', colorPathRight = '#000000'
 
 function setup_() {
     R = min(width, height) / 8
@@ -28,10 +30,9 @@ function computePaths() {
 
 function draw_() {
     update()
-    background('#fffdc7')
+    background(colorBg)
     translate(width/2, height/2)
     scale(1, -1)
-    fill('#c7eaff')
     if(showCircles) {
         drawCircleA()
         drawCircleB()
@@ -55,27 +56,39 @@ function update() {
 }
 
 function drawPaths() {
+    push()
     for(let i = 1; i <= step; i++) {
-        if(drawUp)
+        if(drawUp) {
+            stroke(colorPathUp)
             line(pathUp[i-1].x, pathUp[i-1].y, pathUp[i].x, pathUp[i].y)
-        if(drawCenter)
+        }
+        if(drawCenter) {
+            stroke(colorPathCenter)
             line(pathCenter[i-1].x, pathCenter[i-1].y, pathCenter[i].x, pathCenter[i].y)
-        if(drawDown)
+        }
+        if(drawDown) {
+            stroke(colorPathDown)
             line(pathDown[i-1].x, pathDown[i-1].y, pathDown[i].x, pathDown[i].y)
-        if(drawLeft)
+        }
+        if(drawLeft) {
+            stroke(colorPathLeft)
             line(pathLeft[i-1].x, pathLeft[i-1].y, pathLeft[i].x, pathLeft[i].y)
-        if(drawRight)
+        }
+        if(drawRight) {
+            stroke(colorPathRight)
             line(pathRight[i-1].x, pathRight[i-1].y, pathRight[i].x, pathRight[i].y)
+        }
     }
+    pop()
 }
 
 function drawCircleA() {
-    fill('#ffc7c7')
+    fill(colorCircleA)
     circle(circleA.x, circleA.y, R*2)
 }
 
 function drawCircleB() {
-    fill('#c7eaff')
+    fill(colorCircleB)
     circle(circleB.x, circleB.y, r*2)
 }
 
@@ -91,10 +104,10 @@ function drawDetails() {
         drawLinePointVector(circleB, Vector.rotate(BA, -angleB - HALF_PI))
     if(drawCenter)
         drawLinePointVector(circleB, Vector.rotate(BA, -angleB))
-    fill('#0000FF')
-    circle(circleB.x, circleB.y, r/14)
-    fill('#FF0000')
+    fill(colorCenterA)
     circle(circleA.x, circleA.y, R/14)
+    fill(colorCenterB)
+    circle(circleB.x, circleB.y, r/14)
 }
 
 function drawLinePointVector(p, v) {
